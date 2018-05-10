@@ -18,8 +18,8 @@
 ;;(def logo-img (js/require "./images/cljs.png"))
 
 (defn alert [title]
-	(get-status))
-      ;;(.alert (.-Alert ReactNative) title))
+  ;;(get-status))
+  (.alert (.-Alert ReactNative) title))
 
 
 (def app-state (r/atom { 
@@ -43,6 +43,10 @@
 (defn get-status []
    (prn "get-status")
    (let [response (fetch-json "http://192.168.2.13")]))
+
+(defn cross []
+  (prn "cross")
+  (fetch-json "http://192.168.2.13/?status=2"))
   
   ;; fetch js
   ;;(-> (js/fetch "http://192.168.2.13"  (clj->js m))
@@ -78,7 +82,7 @@
 
   ;; ---------------fetch react----------------------
   ;;(prn ((.fetch ReactNative) "http://192.168.2.13"))
-	
+  
   ;; -------------- cljs-http -----------------------
   ;;(go (let [response (<! (http/get "http://192.168.2.13"
   ;;                               {:with-credentials? false}))
@@ -121,16 +125,12 @@
        [text {:style {:font-size 100  :line-height 90 :text-align "center" :color (light-to-display (:status @app-state) "1")}} "●"]
        [text {:style {:font-size 100  :line-height 90 :text-align "center" :color (light-to-display (:status @app-state) "0")}} "●"]
        [text {:style {:font-size 100  :line-height 90 :text-align "center" :color (light-to-display (:status @app-state) "3")}} "●"]
-       ;;[image {:source {:uri "https://www.seoclerk.com/pics/551103-1TOqFD1502285018.jpg"}
-        ;;       :style  {:width 80 :height 80 :margin-bottom 30}}]
        [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}
-                             :on-press #(alert "HELLO!")}
-        [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "update"]]
-       ;;[text {:style {:font-size 20 :font-weight "100" :margin-bottom 40 :text-align "center"}} (:status @app-state)]
+                             :on-press #(cross)}
+        [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "CROSS"]]
        ])))
 
 (defn init []
       (dispatch-sync [:initialize-db])
       (.registerComponent app-registry "Trafficklights" #(r/reactify-component app-root)))
-
 
