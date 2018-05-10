@@ -8,27 +8,29 @@ Para instalar o re-natal é preciso instalar suas dependências:
 
 `pm install -g react-native-cli`
 
-#Watchman
-`$ git clone https://github.com/facebook/watchman.git
+## Watchman
+
+```$ git clone https://github.com/facebook/watchman.git
 $ cd watchman
 $ git checkout v4.9.0  # the latest stable release
 $ ./autogen.sh
 $ ./configure
 $ make
-$ sudo make install`
+$ sudo make install```
 
 
-#Node.js 
+## Node.js 
 Uma das dependencias para o re-natal é o node.js. Para instalar basta instalar o gerenciador de versões do node com:
 https://github.com/creationix/nvm
-`wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+
+```wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 nvm install 8.10.0
-vm use 8.10.0`
+vm use 8.10.0```
 
 
-#Leiningen
+## Leiningen
 Instalando o java:
-sudo apt-get install openjdk-8-jre-headless
+`sudo apt-get install openjdk-8-jre-headless`
 
 Tutorial:https://lispcast.com/clojure-ubuntu/
 
@@ -36,14 +38,14 @@ Download do script em:https://leiningen.org/
 
 Link: https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
 
-`sudo mkdir -p /usr/local/bin/
+```sudo mkdir -p /usr/local/bin/
 sudo mv ~/Downloads/lein* /usr/local/bin/lein
 sudo chmod a+x /usr/local/bin/lein
-export PATH=$PATH:/usr/local/bin`
+export PATH=$PATH:/usr/local/bin```
 
 
 
-#Criando um projeto do re-natal
+## Criando um projeto do re-natal
 `sudo npm install -g re-natal`
 
 Para criar o projeto:
@@ -56,17 +58,17 @@ Com o projeto criado, para rodar no android é preciso instalar o ADB:
 
 Para iniciar o react native na pasta do projeto:
 
-`react-native start --reset-cache 
+```react-native start --reset-cache 
 re-natal use-android-device real
 re-natal use-figwheel
 lein figwheel android
-react-native run-android`
+react-native run-android```
 
 Para mostrar os logs de execução:
 
 `react-native log-android`
 
-#Erros
+## Erros
 
 Pode ser necessário ter que criar uma variavel para o caminho do android sdk, para criar no shell local: `export ANDROID_HOME="/home/user/Android/Sdk"`
 
