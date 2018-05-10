@@ -10,14 +10,13 @@ Para instalar o re-natal é preciso instalar suas dependências:
 
 ## Watchman
 
-```$ git clone https://github.com/facebook/watchman.git
-$ cd watchman
-$ git checkout v4.9.0  # the latest stable release
-$ ./autogen.sh
-$ ./configure
-$ make
-$ sudo make install```
-
+```git clone https://github.com/facebook/watchman.git
+cd watchman
+git checkout v4.9.0  # the latest stable release
+./autogen.sh
+./configure
+make
+sudo make install```
 
 ## Node.js 
 Uma das dependencias para o re-natal é o node.js. Para instalar basta instalar o gerenciador de versões do node com:
@@ -42,8 +41,6 @@ Link: https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
 sudo mv ~/Downloads/lein* /usr/local/bin/lein
 sudo chmod a+x /usr/local/bin/lein
 export PATH=$PATH:/usr/local/bin```
-
-
 
 ## Criando um projeto do re-natal
 `sudo npm install -g re-natal`
@@ -91,10 +88,6 @@ Devera ser informado o IP e a porta, ex: 192.168.1.2:8081
 Para utilizar o figwheel, também será necessário alterar o IP no arquivo index.android.js na raiz do projeto, ficará assim:
 
 `start('NomedoProjeto','android','192.168.1.2');`
-
-
-
-
 
 ## Usage
 
