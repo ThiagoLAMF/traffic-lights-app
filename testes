@@ -1,54 +1,85 @@
 import React, { Component } from "react";
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  TouchableOpacity
+	Platform,
+	StyleSheet,
+	Text,
+	View,
+	Alert,
+	TouchableOpacity
 } from "react-native";
 
 export default class App extends Component {
-  state = {
-		id: "1",
-		status: "0",
-		lastUpdate: "0",
-		now: "0",
-		timeRed: "0",
-		timeYellow: "0",
-		timeGreen: "0",
-    location: {
-		coords: { latitude:0,longitude:0,altitude:0},
-	},
-	distance: 0
-  };
+	state = {
+		traffic:{
+			id: "1",
+			status: "0",
+			lastUpdate: "0",
+			now: "0",
+			timeRed: "0",
+			timeYellow: "0",
+			timeGreen: "0",
+			latitude: "0",
+			longitude: "0"
+		},
+		location: {
+			coords: { latitude:0,longitude:0,altitude:0},
+		},
+		distance: 0,
+		error: ""
+	};
 
-  findCoordinates = () => {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        const location = position;
-		
-        this.setState({ location });
-      },
-      error => Alert.alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-  };
+	findCoordinates = () => {
+		navigator.geolocation.getCurrentPosition(
+		  position => {
+			const location = position;
+			
+			this.setState({ location });
+			var p = 0.017453292519943295;    // Math.PI / 180
+			var c = Math.cos;
+			var a = 0.5 - c((this.state.traffic['latitude'] - this.state.location['coords']['latitude']) * p)/2 + 
+			  c(this.state.location['coords']['latitude'] * p) * c(this.state.traffic['latitude'] * p) * 
+			  (1 - c((this.state.traffic['longitude'] - this.state.location['coords']['longitude']) * p))/2;
+			var teste= (12742 * Math.asin(Math.sqrt(a))) * 1000
+			this.setState({distance:teste})
+		  },
+		  error => Alert.alert(error.message),
+		  { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+		);
+		/*this.watchId = navigator.geolocation.watchPosition( 
+		  (position) => {
+			const location = position;
+			
+			this.setState({ location });
+		  },
+		  (error) => this.setState({ error: error.message }),
+		  { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 10 },
+		);*/
+	};
 	async componentDidMount() {
         const response = await fetch(`https://my-json-server.typicode.com/thiagolamf/nodemcu-traffic-lights/traffic`)
         const responseJson = await response.json()
-        this.setState({id: responseJson.id})
+        this.setState({traffic: responseJson})
+		
+		this.watchId = navigator.geolocation.watchPosition(
+		  (position) => {
+			const location = position;
+			
+			this.setState({ location });
+			var p = 0.017453292519943295;    // Math.PI / 180
+			var c = Math.cos;
+			var a = 0.5 - c((this.state.traffic['latitude'] - this.state.location['coords']['latitude']) * p)/2 + 
+			  c(this.state.location['coords']['latitude'] * p) * c(this.state.traffic['latitude'] * p) * 
+			  (1 - c((this.state.traffic['longitude'] - this.state.location['coords']['longitude']) * p))/2;
+			var teste= (12742 * Math.asin(Math.sqrt(a))) * 1000
+			this.setState({distance:teste})
+		  },
+		  (error) => this.setState({ error: error.message }),
+		  { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 0.1 }
+		);
     }
-  
-	distance=(lat1, lon1, lat2, lon2)=>{
-		var p = 0.017453292519943295;    // Math.PI / 180
-		var c = Math.cos;
-		var a = 0.5 - c((lat2 - lat1) * p)/2 + 
-          c(lat1 * p) * c(lat2 * p) * 
-          (1 - c((lon2 - lon1) * p))/2;
-		this.setState()
-		return 12742 * Math.asin(Math.sqrt(a))
-	};
+	componentWillUnmount() {
+		navigator.geolocation.clearWatch(this.watchId);
+	}
  /*distance(lat1, lon1, lat2, lon2) {
 		var p = 0.017453292519943295;    // Math.PI / 180
 		var c = Math.cos;
@@ -63,13 +94,17 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this.findCoordinates}>
-          <Text style={styles.welcome}>TESTE</Text>
-		  <Text style={styles.welcome}>ID: {this.state.id} </Text>
-		  <Text>Altitude: {this.state.location['coords']['altitude']}</Text>
+          <Text style={styles.welcome}>LOCAL:</Text>
           <Text>Latitude: {this.state.location['coords']['latitude']}</Text>
 		  <Text>Longitude: {this.state.location['coords']['longitude']}</Text>
-
         </TouchableOpacity>
+		<Text style={styles.welcome}>JSON:</Text>
+		<Text>Latitude: {this.state.traffic['latitude']}</Text>
+		<Text>Longitude: {this.state.traffic['longitude']}</Text>
+		
+		<Text style={styles.welcome}>Distancia: {this.state.distance}</Text>
+		
+		<Text>Erro:{this.state.error} </Text>
       </View>
     );
   }
